@@ -72,7 +72,6 @@ async def habit_view(call):
 @bot.callback_query_handler(func=lambda call: call.data.startswith('habit_nav_'))
 async def habit_next(call):
     offset = int(call.data.split('_')[2])
-    print(offset)
     list_habit = Habit.get_habit(session, call.message.chat.id, offset=offset)
     count_habit =  Habit.count_habit(session, call.message.chat.id)
     if list_habit:
@@ -142,13 +141,6 @@ async def echo(message:Message):
         habit_id = user.stage.split(' ')[3]
         habit = Habit.get_habit(session, user.id_telegram, habit_id)
         habit_name = habit[0].name
-        # if habit:
-        #     habit[0].description = message.text
-        #     session.commit()
-        #     hp.update_stage(session, message.chat.id, constant.Stage.start)
-        #     await bot.send_message(message.chat.id, f"Deskripsi habit {habit[0].name} berhasil diubah.")
-        # else:
-        #     await bot.send_message(message.chat.id, "Habit tidak ditemukan.")
         habit = Habit.update_habit(session, user.id_telegram, habit_id, habit_name, message.text)
         if habit:
             hp.update_stage(session, message.chat.id, constant.Stage.start)
